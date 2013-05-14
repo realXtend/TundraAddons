@@ -1,10 +1,13 @@
+if (NOT APPLE) # Python and PythonQt are not available currently on Mac.
+    if ("$ENV{TUNDRA_PYTHON_ENABLED}" STREQUAL "TRUE")
+        configure_python()
+        configure_python_qt()
+
 # Define target name and output directory
 init_target (PythonScriptModule OUTPUT plugins)
 
-if (NOT APPLE) # Python and PythonQt are not available currently on Mac.
-    configure_python()
-    configure_python_qt()
-endif()
+configure_python()
+configure_python_qt()
 
 # Get EC defines that are added to this build.
 GetEntityComponents()
@@ -66,3 +69,6 @@ setup_install_directory (${TUNDRA_BIN}/pyplugins)
 #setup_install_windows_deps ("python26.dll;PythonQt.dll;PythonQt_QtAll.dll" Release|RelWithDebInfo "python26_d.dll;PythonQt_d.dll;PythonQt_QtAll_d.dll" Debug)
 #setup_install_windows_deps_regexp ("[/]pyplugins[/]python[/]DLLs[/].*[^d][.]pyd$" Release|RelWithDebInfo "[/]pyplugins[/]python[/]DLLs[/].*[d][.]pyd$" Debug)
 #setup_install_windows_deps_regexp ("[/]pyplugins[/]python[/].*[.]zip$" Release|RelWithDebInfo|Debug)
+
+    endif()
+endif()
