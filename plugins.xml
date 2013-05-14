@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Tundra>
+  <plugin path="BrowserUiPlugin" />             <!-- Depends on JavascriptModule -->
+  <plugin path="PythonScriptModule" />          <!-- Depends on OgreRenderingModule, TundraProtocolModule -->
+  <plugin path="VlcPlugin" />                   <!-- Depends on SceneWidgetComponents -->
+  <plugin path="KinectModule" />                <!-- Does not depend on any other module -->
+  <plugin path="XMPPModule" />                  <!-- Does not depend on any other module -->
+</Tundra>

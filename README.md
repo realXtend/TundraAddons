@@ -1,11 +1,8 @@
 Additional modules and plugins for realXtend Tundra, which are not part of the
-core build & repository. To enable these modules, clone this repository to the 
-"src" directory of your Tundra SDK checkout (ie. src/TundraAddons), then add
-either the whole TundraAddons directory, or individual modules to the bottom
-of your CMakeBuildConfig.txt using CMake's add_subdirectory command. For example
+core build & repository. 
 
-add_subdirectory (src/TundraAddons)
+Tundra BuildConfigTemplate will automatically enable these modules if they are 
+checked out to the directory src/TundraAddons.
 
-or
-
-add_subdirectory (src/TundraAddons/PythonScriptModule) 
+You will need to manually copy-paste the content from plugins.xml to your
+Tundra config to enable the loading of these modules at startup.

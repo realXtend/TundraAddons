@@ -1,3 +1,6 @@
+# BROWSER_SHARED_DATA_ENABLED controls if we need to link SceneWidgetComponents against BrowserUiPlugin
+# in order to get shared data accross all WebView components. This is optional and can be turned off with setting this to 0.
+set(BROWSER_SHARED_DATA_ENABLED 0)
 
 init_target(BrowserUiPlugin OUTPUT plugins)
 
