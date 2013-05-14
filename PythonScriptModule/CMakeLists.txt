@@ -1,6 +1,11 @@
 # Define target name and output directory
 init_target (PythonScriptModule OUTPUT plugins)
 
+if (NOT APPLE) # Python and PythonQt are not available currently on Mac.
+    configure_python()
+    configure_python_qt()
+endif()
+
 # Get EC defines that are added to this build.
 GetEntityComponents()
 
