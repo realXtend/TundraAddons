@@ -1,6 +1,9 @@
 file(COPY addons.xml DESTINATION ${TUNDRA_BIN})
+file(COPY Scenes DESTINATION ${TUNDRA_BIN})
+file(COPY jsmodules DESTINATION ${TUNDRA_BIN})
 
 add_subdirectory (BrowserUiPlugin)
+#add_subdirectory (CaveStereoModule)
 add_subdirectory (KinectModule)
 add_subdirectory (PythonScriptModule)
 add_subdirectory (VlcPlugin)
