@@ -15,24 +15,34 @@ if (!framework.IsHeadless())
 function CreateMenu()
 {
     var viewMenu = findChild(ui.MainWindow().menuBar(), "ViewMenu");
-
     if (viewMenu == null)
     {
         print("Menu not created yet. Retrying");
         frame.DelayedExecute(1.0).Triggered.connect(CreateMenu);
         return;
     }
-    if (framework.GetModuleByName("CAVEStereo"))
+
+    if (framework.ModuleByName("CAVEStereo"))
     {
         viewMenu.addAction("Cave").triggered.connect(OpenCaveWindow);
         viewMenu.addAction("Stereoscopy").triggered.connect(OpenStereoscopyWindow);
     }
+
+    if (framework.ModuleByName("PythonScript"))
+        viewMenu.addAction("Python Console").triggered.connect(OpenPythonConsole);
 }
 
-function OpenStereoscopyWindow() {
-    framework.GetModuleByName("CAVEStereo").ShowStereoscopyWindow();
+function OpenStereoscopyWindow()
+{
+    framework.ModuleByName("CAVEStereo").ShowStereoscopyWindow();
 }
 
-function OpenCaveWindow() {
-    framework.GetModuleByName("CAVEStereo").ShowCaveWindow();
+function OpenCaveWindow()
+{
+    framework.ModuleByName("CAVEStereo").ShowCaveWindow();
+}
+
+function OpenPythonConsole()
+{
+    framework.ModuleByName("PythonScript").ShowConsole();
 }
