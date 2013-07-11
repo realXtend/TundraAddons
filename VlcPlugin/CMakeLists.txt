@@ -1,4 +1,3 @@
-
 macro(configure_vlc)
     if ("${VLC_ROOT}" STREQUAL "")
         file (TO_CMAKE_PATH "$ENV{VLC_ROOT}" VLC_ROOT)
@@ -22,7 +21,7 @@ endmacro()
 
 if (UNIX OR APPLE)
     set (SHOULD_RUN 1)
-elseif (WIN32 AND VC90)
+elseif (WIN32 AND MSVC90)
     set (SHOULD_RUN 1)
 else ()
     set (SHOULD_RUN 0)
@@ -38,7 +37,7 @@ if (SHOULD_RUN)
     UiFolder ()
 
     file (GLOB CPP_FILES *.cpp)
-    if (WIN32 AND VC90)
+    if (WIN32 AND MSVC90)
         include_directories(windows/)
         file(GLOB H_FILES *.h windows/*.h)
     else() # Omit stdint.h in other platforms.
