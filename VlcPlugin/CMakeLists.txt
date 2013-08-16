@@ -21,7 +21,7 @@ endmacro()
 
 if (UNIX OR APPLE)
     set (SHOULD_RUN 1)
-elseif (WIN32 AND MSVC90)
+elseif (WIN32 AND MSVC90 AND NOT CMAKE_CL_64)
     set (SHOULD_RUN 1)
 else ()
     set (SHOULD_RUN 0)
