@@ -3,10 +3,8 @@
                      "CAVEStereoModule",
                      "XMPPModule",
                      {
-                         "name"      : "VlcPlugin",
-                         "platform"  : "win",
-                         "arch"      : "x86",
-                         "match-all" : true
+                         "name"     : "VlcPlugin",
+                         "exclude"  : { "platform" : "win", "arch" : "x64" }
                      },
                      {
                          "name"     : "PythonScriptModule",
