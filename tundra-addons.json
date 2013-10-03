@@ -1,0 +1,20 @@
+[
+    { "--plugin" : [ "BrowserUiPlugin",
+                     "CAVEStereoModule",
+                     "XMPPModule",
+                     {
+                         "name" : "VlcPlugin",
+                         "arch" : "x86"
+                     },
+                     {
+                         "name"     : "PythonScriptModule",
+                         "platform" : "x11"
+                     },
+                     {
+                         "name"     : "KinectModule",
+                         "platform" : "win"
+                     } ]
+    },
+
+    { "--jsplugin" : "AddonsMenuBar.js" }
+]

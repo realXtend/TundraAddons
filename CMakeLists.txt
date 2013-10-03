@@ -1,7 +1,7 @@
 # Add TundraAddons solution folder to the tundra solution if applicable.
 set(PROJECT_TYPE "TundraAddons")
 
-file(COPY addons.xml DESTINATION ${TUNDRA_BIN})
+file(COPY tundra-addons.json DESTINATION ${TUNDRA_BIN})
 file(COPY Scenes DESTINATION ${TUNDRA_BIN})
 file(COPY jsmodules DESTINATION ${TUNDRA_BIN})
 
