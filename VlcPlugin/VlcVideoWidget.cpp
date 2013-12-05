@@ -2,6 +2,7 @@
 
 #include "VlcVideoWidget.h"
 #include "LoggingFunctions.h"
+#include "AssetAPI.h"
 
 #include <QPainter>
 #include <QUrl>
@@ -107,7 +108,18 @@ bool VlcVideoWidget::OpenSource(const QString &videoUrl)
     if (!Initialized())
         return false;
 
-    vlcMedia_ = libvlc_media_new_path(vlcInstance_, videoUrl.toAscii().constData());
+    // We need to prepend file:// if this is a path on disk.
+    QString source = videoUrl;
+    AssetAPI::AssetRefType sourceType = AssetAPI::ParseAssetRef(source);
+    if ((sourceType == AssetAPI::AssetRefLocalPath || sourceType == AssetAPI::AssetRefLocalUrl))
+    {
+        if (source.startsWith("file://", Qt::CaseInsensitive))
+            source = source.mid(7);
+        vlcMedia_ = libvlc_media_new_path(vlcInstance_, source.toUtf8().constData());
+    }
+    else
+        vlcMedia_ = libvlc_media_new_location(vlcInstance_, source.toUtf8().constData());
+
     if (vlcMedia_ == 0)
     {
         LogError("VlcVideoWidget: Could not load media from '" + videoUrl + "'");

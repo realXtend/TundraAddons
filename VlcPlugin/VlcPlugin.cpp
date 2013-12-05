@@ -7,6 +7,13 @@
 #include "SceneAPI.h"
 #include "IComponentFactory.h"
 
+#ifdef __APPLE__
+#include "vlc/libvlc.h"
+#include <stdlib.h>
+#include <QDir>
+#include "Application.h"
+#endif
+
 VlcPlugin::VlcPlugin() :
     IModule("VlcPlugin")
 {
@@ -14,6 +21,19 @@ VlcPlugin::VlcPlugin() :
 
 void VlcPlugin::Load()
 {
+#ifdef __APPLE__
+    QString vlcLibVersion(libvlc_get_version());
+    if (vlcLibVersion.startsWith("2"))
+    {
+        QString envValue = Application::InstallationDirectory() + "plugins/vlcplugins";
+        if (QDir(envValue).exists())
+        {
+            std::string value = envValue.toStdString();
+            setenv("VLC_PLUGIN_PATH", value.c_str(), 1); // Add an environment variable
+        }
+    }
+#endif
+
     framework_->Scene()->RegisterComponentFactory(ComponentFactoryPtr(new GenericComponentFactory<EC_MediaPlayer>));
 }
 

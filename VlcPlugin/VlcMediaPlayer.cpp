@@ -227,6 +227,9 @@ const QList<QByteArray> VlcMediaPlayer::GenerateVlcParameters()
         QString pluginPath = QLatin1Literal("--plugin-path=") % QDir::toNativeSeparators(pluginDir.absolutePath());
         params << QFile::encodeName(pluginPath);
     }
+
+//    if (IsLogChannelEnabled(LogChannelDebug))
+//        params << QByteArray("--verbose=2");
     
     return params;
 }
