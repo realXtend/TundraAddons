@@ -2,6 +2,7 @@
     { "--plugin" : [ "BrowserUiPlugin",
                      "CAVEStereoModule",
                      "XMPPModule",
+                     "HttpServerModule",
                      {
                          "name"     : "VlcPlugin",
                          "exclude"  : { "platform" : "win", "arch" : "x64" }
