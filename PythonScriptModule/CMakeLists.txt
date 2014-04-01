@@ -1,5 +1,4 @@
-# TODO remove the todo_prefix when this commit is in the mainline https://github.com/Adminotech/tundra/commit/aa8a93383bb1aec6c03dec82ce8275c0f3667ec2
-macro(todo_configure_python)
+macro(configure_python)
     sagase_configure_package(PYTHON
         NAMES PythonLibs Python python Python26 python26 Python2.6 python2.6
         COMPONENTS Python python Python26 python Python2.6 python2.6
@@ -23,8 +22,8 @@ macro(todo_configure_python)
 
     sagase_configure_report(PYTHON)
 endmacro()
-# TODO remove the todo_prefix when this commit is in the mainline https://github.com/Adminotech/tundra/commit/aa8a93383bb1aec6c03dec82ce8275c0f3667ec2
-macro(todo_configure_python_qt)
+
+macro(configure_python_qt)
     sagase_configure_package(PYTHON_QT
         NAMES PythonQt
         COMPONENTS PythonQt PythonQt_QtAll
