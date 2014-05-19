@@ -673,16 +673,16 @@ void HttpServer::HandleSceneHttpRequest(ConnectionPtr connection, const QString&
                                 attr->FromString(attribute_element.attribute("value"), AttributeChange::Default);
                             attribute_element = attribute_element.nextSiblingElement("attribute");
                         }
-
-                        // Reply is the new content of the component
-                        QByteArray componentXml;
-                        QDomDocument componentDoc("Component");
-                        QDomElement empty;
-                        comp->SerializeTo(componentDoc, empty, true);
-                        componentXml = componentDoc.toByteArray();
-                        SetHttpRequestReply(connection, componentXml, "application/xml", websocketpp::http::status_code::ok);
-                        return;
                     }
+
+                    // Reply is the new content of the component
+                    QByteArray componentXml;
+                    QDomDocument componentDoc("Component");
+                    QDomElement empty;
+                    comp->SerializeTo(componentDoc, empty, true);
+                    componentXml = componentDoc.toByteArray();
+                    SetHttpRequestReply(connection, componentXml, "application/xml", websocketpp::http::status_code::ok);
+                    return;
                 }
             }
 
