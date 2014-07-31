@@ -129,6 +129,9 @@ private slots:
     /// Handler for window resize signal.
     void RenderWindowResized();
 
+    /// Initializes component state.
+    void InitComponent();
+
     /// Prepares everything related to the parent entity and other needed components.
     void PrepareComponent();
 

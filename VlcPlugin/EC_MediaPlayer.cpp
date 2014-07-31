@@ -42,9 +42,6 @@ EC_MediaPlayer::EC_MediaPlayer(Scene* scene) :
     INIT_ATTRIBUTE_VALUE(streamingAllowed, "Streaming Allowed", true),
     INIT_ATTRIBUTE_VALUE(enabled, "Enabled", true)
 {
-    if (!ViewEnabled() || GetFramework()->IsHeadless())
-        return;
-
     // Set metadata min/max/step
     static AttributeMetadata submeshMetaData;
     static bool metadataInitialized = false;
@@ -56,45 +53,8 @@ EC_MediaPlayer::EC_MediaPlayer(Scene* scene) :
     }
     renderSubmeshIndex.SetMetadata(&submeshMetaData);
 
-    // Init our internal media player
-    mediaPlayer_ = new VlcMediaPlayer();
-    connect(mediaPlayer_, SIGNAL(FrameUpdate(QImage)), SLOT(OnFrameUpdate(QImage)), Qt::UniqueConnection);
-
     // Connect signals from IComponent
-    connect(this, SIGNAL(ParentEntitySet()), SLOT(PrepareComponent()), Qt::UniqueConnection);
-
-    // Connect window size changes to update rendering as the ogre textures go black.
-    if (GetFramework()->Ui()->MainWindow())
-        connect(GetFramework()->Ui()->MainWindow(), SIGNAL(WindowResizeEvent(int,int)), SLOT(RenderWindowResized()), Qt::UniqueConnection);
-
-    resizeRenderTimer_ = new QTimer(this);
-    resizeRenderTimer_->setSingleShot(true);
-    connect(resizeRenderTimer_, SIGNAL(timeout()), mediaPlayer_, SLOT(ForceUpdateImage()), Qt::UniqueConnection);
-
-    // Prepare scene interactions
-    SceneInteract *sceneInteract = GetFramework()->GetModule<SceneInteract>();
-    if (sceneInteract)
-    {
-        connect(sceneInteract, SIGNAL(EntityClicked(Entity*, Qt::MouseButton, RaycastResult*)), 
-                SLOT(EntityClicked(Entity*, Qt::MouseButton, RaycastResult*)));
-    }
-
-    // Prepare media downloader
-    mediaDownloader_ = new AssetRefListener();
-    connect(mediaDownloader_, SIGNAL(Loaded(AssetPtr)), SLOT(OnMediaLoaded(AssetPtr)));
-    connect(mediaDownloader_, SIGNAL(TransferFailed(IAssetTransfer*, QString)), SLOT(OnMediaFailed(IAssetTransfer*, QString)));
-
-    // Construct loading image
-    downloadingLogo_ = QImage(500, 300, QImage::Format_ARGB32);
-    downloadingLogo_.fill(Qt::black);
-    QPixmap bufferingIcon(":/images/buffering.png");
-    QPoint centerPos = downloadingLogo_.rect().center();
-    QRect target(centerPos.x() - (bufferingIcon.width()/2), centerPos.y() - (bufferingIcon.height()/2), bufferingIcon.width(), bufferingIcon.height());
-    QPainter p(&downloadingLogo_);
-    p.setPen(Qt::white);
-    p.drawPixmap(target, bufferingIcon, bufferingIcon.rect());
-    p.drawText(5, 12, "Downloading media...");
-    p.end();
+    connect(this, SIGNAL(ParentEntitySet()), SLOT(InitComponent()), Qt::UniqueConnection);
 }
 
 EC_MediaPlayer::~EC_MediaPlayer()
@@ -298,10 +258,56 @@ void EC_MediaPlayer::RenderWindowResized()
 #endif
 }
 
+void EC_MediaPlayer::InitComponent()
+{
+    // Don't do anything if rendering is not enabled
+    if (!ViewEnabled() || !GetFramework() || GetFramework()->IsHeadless())
+        return;
+
+    // Init our internal media player
+    mediaPlayer_ = new VlcMediaPlayer();
+    connect(mediaPlayer_, SIGNAL(FrameUpdate(QImage)), SLOT(OnFrameUpdate(QImage)), Qt::UniqueConnection);
+
+    // Connect window size changes to update rendering as the ogre textures go black.
+    if (GetFramework()->Ui()->MainWindow())
+        connect(GetFramework()->Ui()->MainWindow(), SIGNAL(WindowResizeEvent(int,int)), SLOT(RenderWindowResized()), Qt::UniqueConnection);
+
+    resizeRenderTimer_ = new QTimer(this);
+    resizeRenderTimer_->setSingleShot(true);
+    connect(resizeRenderTimer_, SIGNAL(timeout()), mediaPlayer_, SLOT(ForceUpdateImage()), Qt::UniqueConnection);
+
+    // Prepare scene interactions
+    SceneInteract *sceneInteract = GetFramework()->GetModule<SceneInteract>();
+    if (sceneInteract)
+    {
+        connect(sceneInteract, SIGNAL(EntityClicked(Entity*, Qt::MouseButton, RaycastResult*)), 
+            SLOT(EntityClicked(Entity*, Qt::MouseButton, RaycastResult*)));
+    }
+
+    // Prepare media downloader
+    mediaDownloader_ = new AssetRefListener();
+    connect(mediaDownloader_, SIGNAL(Loaded(AssetPtr)), SLOT(OnMediaLoaded(AssetPtr)));
+    connect(mediaDownloader_, SIGNAL(TransferFailed(IAssetTransfer*, QString)), SLOT(OnMediaFailed(IAssetTransfer*, QString)));
+
+    // Construct loading image
+    downloadingLogo_ = QImage(500, 300, QImage::Format_ARGB32);
+    downloadingLogo_.fill(Qt::black);
+    QPixmap bufferingIcon(":/images/buffering.png");
+    QPoint centerPos = downloadingLogo_.rect().center();
+    QRect target(centerPos.x() - (bufferingIcon.width()/2), centerPos.y() - (bufferingIcon.height()/2), bufferingIcon.width(), bufferingIcon.height());
+    QPainter p(&downloadingLogo_);
+    p.setPen(Qt::white);
+    p.drawPixmap(target, bufferingIcon, bufferingIcon.rect());
+    p.drawText(5, 12, "Downloading media...");
+    p.end();
+    
+    PrepareComponent();
+}
+
 void EC_MediaPlayer::PrepareComponent()
 {
     // Don't do anything if rendering is not enabled
-    if (!ViewEnabled() || GetFramework()->IsHeadless())
+    if (!ViewEnabled() || !GetFramework() || GetFramework()->IsHeadless())
         return;
 
     // Some security checks
